@@ -6,10 +6,10 @@
 $tests = array(
  	"google global" => array(
     "request" => array(
-      'region'=>'in',
+      'region'=>'gb',
           'search_engine' => 'google',
-           'phrase' => 'আপনি এক কাপ চা বা কফি এক কাপ বা নরম পানীয় একটি কাপ চান?',
-		   'language' => 'bn',
+           'phrase' => 'World Cup Cricket 2015',
+		   'language' => 'en',
 			)
         ),
 );
@@ -17,14 +17,21 @@ $tests = array(
 ##################################################################################
 #   Tests that should return an api error message about max results being over 500
 ##################################################################################
-$errormaxresults = array(
-    
+$errorTests = array(
+"invalid language" => array(
+    "request" => array(
+      'region'=>'gb',
+          'search_engine' => 'google',
+           'phrase' => 'World Cup Cricket 2015',
+		   'language' => 'omi',
+			)
+        ),
 );
 
 // Uncomment the following lines and add the proper values
- //define('API_KEY', 'a');
- //define('API_SECRET', 'b');
- //define('SALT', 'c');
+// define('API_KEY', 'a');
+// define('API_SECRET', 'b');
+// define('SALT', 'c');
 
 // optionally you can define the constants in a file named settings.php
 @include 'settings.php';
@@ -45,7 +52,7 @@ $auth->setApiSecret(API_SECRET);
 $auth->setSalt(SALT);
 
 $serps = new Aseo\Api\V3\Serps\SerpsApiClient($guzzle, $auth);
-$serps->debug = TRUE;
+$serps->debug = false;
 
 
 
@@ -90,6 +97,8 @@ foreach ($tests as $testName => $testData) {
             }
 
             echo "[OK]\n";
+			
+			var_export($fetchJobResponse);
             break;
         }
 
@@ -119,6 +128,9 @@ foreach ($errorTests as $testName => $testData) {
             if (array_key_exists('error', $fetchJobResponse)) {
                 echo "[OK]";
                 echo "\t ==> " . $fetchJobResponse['error'] . "\n\n";
+				
+				var_export($fetchJobResponse);
+				
                 break;
             }
 
